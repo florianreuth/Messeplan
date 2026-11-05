@@ -1,0 +1,55 @@
+---
+// This project is proprietary software. All rights reserved.
+// See the LICENSE file in the project root for details.
+//
+// Copyright (c) 2026 Florian Reuth <git@florianreuth.de>
+
+import "@fontsource-variable/dm-sans";
+import "@fontsource/dm-serif-display/400.css";
+import "../styles/global.css";
+import { THEME_COLORS, THEME_KEY } from "../lib/client/theme.ts";
+
+interface Props {
+    title: string;
+    description?: string;
+    /** Public pages follow the visitor's light/dark preference; the admin area always stays light. */
+    themed?: boolean;
+}
+
+const { title, description = "Aussteller, Vorträge, Klassenplan und Lageplan der Messe.", themed = true } = Astro.props;
+---
+
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content={THEME_COLORS.light}>
+    <title>{title}</title>
+    <meta name="description" content={description}>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <script is:inline define:vars={{ themed, themeKey: THEME_KEY, colors: THEME_COLORS }}>
+        // Runs before the first paint, otherwise the light variant flashes up
+        if (themed) {
+            const query = matchMedia("(prefers-color-scheme: dark)");
+            const apply = () => {
+                let stored = null;
+                try {
+                    stored = localStorage.getItem(themeKey);
+                } catch {
+                    // Storage blocked, follow the system
+                }
+                const dark = stored ? stored === "dark" : query.matches;
+                document.documentElement.classList.toggle("dark", dark);
+                document.documentElement.style.colorScheme = dark ? "dark" : "light";
+                document.querySelector("meta[name=\"theme-color\"]").setAttribute("content", dark ? colors.dark : colors.light);
+            };
+            apply();
+            query.addEventListener("change", apply);
+        }
+    </script>
+</head>
+<body>
+<slot/>
+</body>
+</html>

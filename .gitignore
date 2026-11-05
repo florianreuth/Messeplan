@@ -1,0 +1,47 @@
+# Gradle
+
+.gradle/
+build/
+out/
+classes/
+.kotlin/
+
+# Eclipse
+
+*.launch
+
+# Idea
+
+.idea/
+!.idea/copyright/*
+!.idea/scopes/*
+*.iml
+*.ipr
+*.iws
+
+# VSCode
+
+.settings/
+.vscode/
+bin/
+.classpath
+.project
+
+# macOS
+
+DS_Store
+
+# Node / Astro
+
+node_modules/
+dist/
+.astro/
+
+# Runtime data (database, sessions)
+
+/data/
+
+# Playwright
+
+test-results/
+playwright-report/

@@ -1,0 +1,22 @@
+---
+// This project is proprietary software. All rights reserved.
+// See the LICENSE file in the project root for details.
+//
+// Copyright (c) 2026 Florian Reuth <git@florianreuth.de>
+
+import AdminApp from "../../components/admin/AdminApp.svelte";
+import Base from "../../layouts/Base.astro";
+import { sectionForPath } from "../../lib/adminSections.ts";
+import { services } from "../../server/instance.ts";
+
+const section = sectionForPath(Astro.url.pathname);
+if (!section) {
+    return Astro.rewrite("/404");
+}
+
+const snapshot = services().repository.snapshot();
+---
+
+<Base title={`Verwaltung – ${snapshot.data.event.name}`} themed={false}>
+    <AdminApp client:load {section} {snapshot}/>
+</Base>

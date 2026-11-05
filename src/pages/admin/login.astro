@@ -1,0 +1,21 @@
+---
+// This project is proprietary software. All rights reserved.
+// See the LICENSE file in the project root for details.
+//
+// Copyright (c) 2026 Florian Reuth <git@florianreuth.de>
+
+import LoginForm from "../../components/admin/LoginForm.svelte";
+import Base from "../../layouts/Base.astro";
+import { sectionForPath } from "../../lib/adminSections.ts";
+
+// Only admin pages are valid targets, anything else could turn the login into an open redirect
+const requested = Astro.url.searchParams.get("next") ?? "";
+const next = sectionForPath(requested) ? requested : "/admin";
+if (Astro.locals.isAdmin) {
+    return Astro.redirect(next);
+}
+---
+
+<Base title="Anmelden – Verwaltung" themed={false}>
+    <LoginForm client:load {next}/>
+</Base>

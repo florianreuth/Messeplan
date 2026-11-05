@@ -1,0 +1,279 @@
+/*
+ * This project is proprietary software. All rights reserved.
+ * See the LICENSE file in the project root for details.
+ *
+ * Copyright (c) 2026 Florian Reuth <git@florianreuth.de>
+ */
+
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --color-navy-50: #eff4fb;
+    --color-navy-100: #dde7f6;
+    --color-navy-200: #bccfec;
+    --color-navy-300: #91aede;
+    --color-navy-400: #6188c9;
+    --color-navy-500: #3f68b0;
+    --color-navy-600: #2f5192;
+    --color-navy-700: #274176;
+    --color-navy-800: #22375f;
+    --color-navy-900: #1a2947;
+    --color-navy-950: #101a2e;
+
+    --color-gold-50: #fff8ea;
+    --color-gold-100: #fdefd0;
+    --color-gold-400: #f5b544;
+    --color-gold-500: #e29a1f;
+    --color-gold-600: #bd7a12;
+
+    --color-surface: #f4f6fa;
+    --color-plan: #fbfcfe;
+    --color-plan-dark: #1c1c1f;
+
+    --font-sans: "DM Sans Variable", "DM Sans Fallback", system-ui, sans-serif;
+    --font-display: "DM Serif Display", "DM Serif Display Fallback", Georgia, serif;
+
+    --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
+    --shadow-lift: 0 4px 12px rgba(16, 24, 40, 0.08), 0 2px 4px rgba(16, 24, 40, 0.04);
+    --shadow-sheet: 0 -8px 40px rgba(16, 24, 40, 0.18);
+
+    --animate-fade-in: fade-in 0.15s ease-out both;
+    --animate-slide-up: slide-up 0.2s ease-out both;
+    --animate-scale-in: scale-in 0.15s ease-out both;
+
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+    }
+
+    @keyframes slide-up {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+    }
+
+    @keyframes scale-in {
+        from {
+            transform: scale(0.96);
+        }
+    }
+
+    @keyframes slide-up-sheet {
+        from {
+            transform: translateY(100%);
+        }
+    }
+}
+
+/* Metric-compatible fallbacks keep the layout from jumping while the web fonts load */
+@font-face {
+    font-family: "DM Sans Fallback";
+    src: local("Arial");
+    ascent-override: 94%;
+    descent-override: 24%;
+    line-gap-override: 0%;
+    size-adjust: 103%;
+}
+
+@font-face {
+    font-family: "DM Serif Display Fallback";
+    src: local("Georgia");
+    ascent-override: 90%;
+    descent-override: 22%;
+    line-gap-override: 0%;
+    size-adjust: 108%;
+}
+
+@layer base {
+    /* Tailwind 3 defaults the markup was designed with */
+    *, ::after, ::before, ::backdrop, ::file-selector-button {
+        border-color: var(--color-slate-200);
+    }
+
+    button:not(:disabled), [role="button"]:not(:disabled) {
+        cursor: pointer;
+    }
+
+    html {
+        scrollbar-gutter: stable;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+        @apply min-h-screen bg-surface text-slate-800 dark:bg-neutral-900 dark:text-neutral-200;
+    }
+
+    h1, h2, h3 {
+        font-family: var(--font-display);
+    }
+
+    /* The search fields bring their own clear button */
+    input[type="search"]::-webkit-search-cancel-button,
+    input[type="search"]::-webkit-search-decoration {
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply bg-slate-100 dark:bg-neutral-800;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply rounded-full bg-navy-300 dark:bg-neutral-600;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        @apply bg-navy-500 dark:bg-neutral-500;
+    }
+}
+
+@layer components {
+    .btn-primary {
+        @apply inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-navy-900 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-navy-700 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-navy-500 focus-visible:ring-offset-2 active:scale-[0.98] disabled:opacity-60 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white dark:focus-visible:ring-neutral-400;
+    }
+
+    .btn-secondary {
+        @apply inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-navy-900 transition-all hover:border-navy-200 hover:bg-navy-50 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-navy-500 focus-visible:ring-offset-2 active:scale-[0.98] dark:border-white/10 dark:bg-neutral-800 dark:text-neutral-100 dark:hover:border-white/20 dark:hover:bg-neutral-700 dark:focus-visible:ring-neutral-400;
+    }
+
+    .btn-danger {
+        @apply inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-red-600 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-red-700 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 active:scale-[0.98];
+    }
+
+    .btn-ghost {
+        @apply inline-flex min-h-10 items-center justify-center gap-2 rounded-xl px-3 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 dark:text-neutral-300 dark:hover:bg-white/10;
+    }
+
+    /* 16px on mobile prevents iOS Safari from zooming in on focus */
+    .input {
+        @apply w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-base transition-all focus:border-transparent focus:ring-2 focus:ring-navy-500 focus:outline-hidden sm:text-sm dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:ring-neutral-400;
+    }
+
+    .label {
+        @apply mb-1 block text-sm font-medium text-slate-700 dark:text-neutral-300;
+    }
+
+    .card {
+        @apply rounded-2xl border border-slate-200/80 bg-white shadow-card dark:border-white/10 dark:bg-neutral-800 dark:shadow-none;
+    }
+
+    .section-title {
+        @apply font-display text-2xl text-navy-900 sm:text-3xl dark:text-white;
+    }
+
+    .zone-badge {
+        @apply inline-flex h-9 w-9 items-center justify-center rounded-xl font-display text-lg font-bold text-white;
+    }
+
+    /* 40px high, large enough as a touch target */
+    .chip {
+        @apply inline-flex min-h-10 items-center gap-1.5 rounded-full border px-3.5 text-sm font-medium whitespace-nowrap transition-all focus:outline-hidden focus-visible:ring-2 focus-visible:ring-navy-500 focus-visible:ring-offset-2 active:scale-[0.97] dark:focus-visible:ring-neutral-400;
+    }
+
+    .chip-idle {
+        @apply border-slate-200 bg-white text-slate-600 hover:border-navy-300 hover:text-navy-800 dark:border-white/10 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:border-neutral-500 dark:hover:text-white;
+    }
+
+    .chip-active {
+        @apply border-navy-900 bg-navy-900 text-white shadow-card dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900;
+    }
+
+    /* Light and dark badge colors derived from one data color, see tintStyle() */
+    .tint {
+        background-color: color-mix(in srgb, var(--tint) 8%, transparent);
+        border-color: color-mix(in srgb, var(--tint) 20%, transparent);
+        color: var(--tint);
+    }
+
+    .dark .tint {
+        background-color: color-mix(in srgb, var(--tint) 15%, transparent);
+        border-color: color-mix(in srgb, var(--tint) 30%, transparent);
+        color: color-mix(in srgb, var(--tint) 55%, white);
+    }
+
+    /* Floor plan colors with light and dark variants, see planPalette.ts */
+    .plan-fill {
+        fill: var(--fill-light);
+    }
+
+    .dark .plan-fill {
+        fill: var(--fill-dark, var(--fill-light));
+        fill-opacity: var(--fill-dark-opacity, 1);
+    }
+
+    .plan-stroke {
+        stroke: var(--stroke-light);
+    }
+
+    .dark .plan-stroke {
+        stroke: var(--stroke-dark, var(--stroke-light));
+    }
+
+    .plan-background {
+        fill: var(--color-plan);
+    }
+
+    .dark .plan-background {
+        fill: var(--color-plan-dark);
+    }
+
+    /* Bottom sheet on mobile, centered dialog from sm on */
+    .sheet-anim {
+        animation: slide-up-sheet 0.28s cubic-bezier(0.32, 0.72, 0, 1) both;
+    }
+
+    @media (width >= 40rem) {
+        .sheet-anim {
+            animation: scale-in 0.15s ease-out both;
+        }
+    }
+}
+
+@utility scrollbar-hide {
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+@utility pt-safe {
+    padding-top: env(safe-area-inset-top);
+}
+
+@utility pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Room for the fixed tab bar on mobile */
+@utility pb-navbar {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+}
+
+@utility tnum {
+    font-variant-numeric: tabular-nums;
+}
+
+@utility content-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 80px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
